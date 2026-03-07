@@ -1,16 +1,8 @@
-// async function getRoutes(){
-//     const res = await fetch('http://localhost:8080/v1/Routes')
-
-// }
-
-interface Route {
-  routeId: string | number; // Use appropriate types (e.g., string or number)
-  routeName: string;
-}
+import { Route } from "@/app/lib/definitions";
+import { getRoutes } from "@/app/lib/api";
 
 export default async function Page() {
-  const res = await fetch('http://localhost:8080/v1/Routes')
-  const routes: Route[] = await res.json()
+  const routes: Route[] = await getRoutes();
   return (
     <ul>
       {routes.map((route) => (
