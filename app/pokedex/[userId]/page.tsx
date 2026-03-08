@@ -1,5 +1,7 @@
 import { UserPokemon } from "@/app/lib/definitions";
 import { getUserPokemonById } from "@/app/lib/api";
+import AllPokemon from "@/app/ui/all-pokemon";
+
 
 
 export default async function Page(props: { params: Promise<{ userId: string }> }) {
@@ -8,16 +10,19 @@ export default async function Page(props: { params: Promise<{ userId: string }> 
   const userId = params.userId;
   const userPokemon : UserPokemon[] = await getUserPokemonById(userId);
 
-  return (
-    <div>
-      Pokedex Page
-      <ul>
-        {userPokemon.map((pokemon) => (
-          <li key={pokemon.pokedexNumber}>
-            {pokemon.pokedexNumber}{pokemon.name}{pokemon.caught}{pokemon.shiny}
-          </li>
-        ))}
-      </ul>
-    </div>
+  return(
+    <AllPokemon allPokemon={userPokemon} />
   );
+  // return (
+  //   <div>
+  //     Pokedex Page
+  //     <ul>
+  //       {userPokemon.map((pokemon) => (
+  //         <li key={pokemon.pokedexNumber}>
+  //           {pokemon.pokedexNumber}{pokemon.name}{pokemon.caught}{pokemon.shiny}
+  //         </li>
+  //       ))}
+  //     </ul>
+  //   </div>
+  // );
 }
