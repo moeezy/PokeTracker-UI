@@ -5,24 +5,15 @@ import { UserPokemon } from "@/app/lib/definitions";
 export default function AllPokemonAllPokemon({ allPokemon }: { allPokemon: UserPokemon[] }){
   //take input in like this so we can destructure(allPokemon instead of props.allPokemon)
     return(
-    <div className="flex w-full flex-col md:col-span-4">
-      <h2 className={`mb-4 text-xl md:text-2xl`}>
-        All Pokemon
-      </h2>
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-        <div className="bg-white px-6">
+    //Parent controls layout
+    //Child controls appearance
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 p-6">
           {allPokemon.map((pokemon, i) => {
             return (
-              <div
+              <div 
                 key={pokemon.pokedexNumber}
-                className={clsx(
-                  'flex flex-row items-center justify-between py-4',
-                  {
-                    'border-t': i !== 0,
-                  },
-                )}
               >
-                <div className="flex items-center">
+                <div className="flex bg-gray-400 border-6 border-amber-300 rounded-2xl items-center px-4 space-y-3">
                   <Image
                     src={pokemon.shiny ? `/heartgold-soulsilver/shiny/${pokemon.pokedexNumber}.png` : `/heartgold-soulsilver/${pokemon.pokedexNumber}.png`} 
                     alt={`${pokemon.name}'s profile picture`}
@@ -30,11 +21,11 @@ export default function AllPokemonAllPokemon({ allPokemon }: { allPokemon: UserP
                     width={64}
                     height={64}
                   />
-                  <div className="min-w-0">
+                  <div className="min-w-280">
                     <p className="truncate text-sm font-semibold md:text-base">
                       {pokemon.name}
                     </p>
-                    <p className="hidden text-sm text-gray-500 sm:block">
+                    <p className="hidden text-sm font-semibold sm:block">
                       {pokemon.pokedexNumber}
                     </p>
                   </div>
@@ -48,11 +39,5 @@ export default function AllPokemonAllPokemon({ allPokemon }: { allPokemon: UserP
             );
           })}
         </div>
-        <div className="flex items-center pb-2 pt-6">
-          {/* <ArrowPathIcon className="h-5 w-5 text-gray-500" /> */}
-          <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
-        </div>
-      </div>
-    </div>
   )
 }
