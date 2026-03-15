@@ -3,17 +3,22 @@
 import { useState } from "react";
 import { UserPokemon } from "@/app/lib/definitions";
 import clsx from "clsx";
+import { updateUserPokemon } from "@/app/lib/api";
 
-export default function PokemonClicks({pokemon}: { pokemon: UserPokemon}){
+export default function PokemonClicks({pokemon, userId}: { pokemon: UserPokemon, userId: string}){
     const [caught, setCaught] = useState(pokemon.caught);
     const [shiny, setShiny] = useState(pokemon.shiny);
 
     const caughtClick = () => {
-        setCaught(!caught)
+        const newCaught = !caught;
+        setCaught(newCaught);
+        updateUserPokemon(userId, {...pokemon, caught: newCaught});
     }
 
     const shinyClick = () => {
-        setShiny(!shiny)
+       const newShiny = !shiny;
+       setShiny(newShiny);
+       updateUserPokemon(userId, {...pokemon, shiny: newShiny});
     }
 
     return(
