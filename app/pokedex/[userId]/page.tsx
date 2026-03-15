@@ -1,6 +1,7 @@
 import { UserPokemon } from "@/app/lib/definitions";
 import { getUserPokemonById } from "@/app/lib/api";
 import AllPokemon from "@/app/ui/all-pokemon";
+import PokemonGrid from "@/app/ui/pokemon/pokemon-grid";
 
 
 
@@ -11,7 +12,7 @@ export default async function Page(props: { params: Promise<{ userId: string }> 
   const userPokemon : UserPokemon[] = await getUserPokemonById(userId);
 
   return(
-    <AllPokemon allPokemon={userPokemon} />
+    <PokemonGrid allPokemon={userPokemon} />
   );
   // return (
   //   <div>
