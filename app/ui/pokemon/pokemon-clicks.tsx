@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { UserPokemon } from "@/app/lib/definitions";
 import clsx from "clsx";
 import { updateUserPokemon } from "@/app/lib/api";
@@ -8,17 +9,20 @@ import { updateUserPokemon } from "@/app/lib/api";
 export default function PokemonClicks({pokemon, userId}: { pokemon: UserPokemon, userId: string}){
     const [caught, setCaught] = useState(pokemon.caught);
     const [shiny, setShiny] = useState(pokemon.shiny);
-
+    const userIdNum: number = Number(userId);
+    const router = useRouter();
     const caughtClick = () => {
         const newCaught = !caught;
         setCaught(newCaught);
-        updateUserPokemon(userId, {...pokemon, caught: newCaught});
+        updateUserPokemon(userIdNum, {...pokemon, caught: newCaught});
+        router.refresh();
     }
 
     const shinyClick = () => {
        const newShiny = !shiny;
        setShiny(newShiny);
-       updateUserPokemon(userId, {...pokemon, shiny: newShiny});
+       updateUserPokemon(userIdNum, {...pokemon, shiny: newShiny});
+       router.refresh();
     }
 
     return(

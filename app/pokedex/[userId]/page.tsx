@@ -12,7 +12,7 @@ export default async function Page(props: { params: Promise<{ userId: string }> 
   const userPokemon : UserPokemon[] = await getUserPokemonById(userId);
 
   return(
-    <PokemonGrid allPokemon={userPokemon} />
+    <PokemonGrid allPokemon={userPokemon} userId={userId} />
   );
   // return (
   //   <div>
