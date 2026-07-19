@@ -26,8 +26,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.8474843"
-     inkscape:cx="751.83319"
-     inkscape:cy="404.60426"
+     inkscape:cx="752.37446"
+     inkscape:cy="361.30212"
      inkscape:window-width="3440"
      inkscape:window-height="1377"
      inkscape:window-x="-8"
@@ -57,21 +57,21 @@
        style="fill:#aa0000"
        d="m 150.47489,424.36085 0.54128,42.21958 -5.95404,5.41276 -67.659577,0.54128 -4.330213,-4.33021 -0.541276,-84.43915 h 47.091066 l 0.54127,36.8068 5.95405,4.33022 z"
        id="path4"
-       inkscape:label="route-47" />
+       inkscape:label="johto-route-47" />
     <path
        style="fill:#aa0000"
        d="m 663.06383,470.36936 0.54128,-14.07319 -29.22894,-0.54128 -24.35745,-0.54127 h -24.35744 l -1.62383,0.54127 v 15.15575 l 75.23744,1.62383 z"
        id="path5"
-       inkscape:label="route-29" />
+       inkscape:label="johto-route-29" />
     <path
        style="fill:#aa0000"
        d="m 711.23745,456.29617 c 31.39404,0 30.85276,-1.08255 30.85276,-1.08255 l -6.49532,8.66042 4.87149,7.57787 h -27.06383 z"
        id="path6"
-       inkscape:label="route-27" />
+       inkscape:label="johto-route-27" />
     <path
        style="fill:#aa0000"
        d="m 615.97277,411.91149 c 8.11914,6.49532 8.11914,7.0366 8.11914,7.0366 l 7.57788,-5.95405 v 42.21958 h -16.2383 z"
        id="path7"
-       inkscape:label="route-46" />
+       inkscape:label="johto-route-46" />
   </g>
 </svg>

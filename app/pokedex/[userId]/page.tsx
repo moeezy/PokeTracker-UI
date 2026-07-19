@@ -2,6 +2,7 @@ import { UserPokemon } from "@/app/lib/definitions";
 import { getUserPokemonById } from "@/app/lib/api";
 import AllPokemon from "@/app/ui/all-pokemon";
 import PokemonGrid from "@/app/ui/pokemon/pokemon-grid";
+import { auth } from "@/auth";
 
 
 
@@ -9,7 +10,11 @@ export default async function Page(props: { params: Promise<{ userId: string }> 
   const params = await props.params; // <-- unwrap the Promise
   //dynamic route parameters (params) in server components are wrapped in a Promise.
   const userId = params.userId;
-  const userPokemon : UserPokemon[] = await getUserPokemonById(userId);
+
+  // proxy.ts already redirects unauthenticated requests to /login before this
+  // renders, so backendToken is expected to be present here.
+  const session = await auth();
+  const userPokemon : UserPokemon[] = await getUserPokemonById(userId, session!.backendToken);
 
   return(
     <PokemonGrid allPokemon={userPokemon} userId={userId} />

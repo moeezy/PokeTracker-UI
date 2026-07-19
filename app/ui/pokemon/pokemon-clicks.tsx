@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 import { UserPokemon } from "@/app/lib/definitions";
 import clsx from "clsx";
 import { updateUserPokemon } from "@/app/lib/api";
@@ -11,17 +12,23 @@ export default function PokemonClicks({pokemon, userId}: { pokemon: UserPokemon,
     const [shiny, setShiny] = useState(pokemon.shiny);
     const userIdNum: number = Number(userId);
     const router = useRouter();
+    // Client component - needs useSession() (via the SessionProvider in
+    // app/providers.tsx) rather than auth(), which only works server-side.
+    const { data: session } = useSession();
+
     const caughtClick = () => {
+        if (!session?.backendToken) return;
         const newCaught = !caught;
         setCaught(newCaught);
-        updateUserPokemon(userIdNum, {...pokemon, caught: newCaught});
+        updateUserPokemon(userIdNum, {...pokemon, caught: newCaught}, session.backendToken);
         router.refresh();
     }
 
     const shinyClick = () => {
+       if (!session?.backendToken) return;
        const newShiny = !shiny;
        setShiny(newShiny);
-       updateUserPokemon(userIdNum, {...pokemon, shiny: newShiny});
+       updateUserPokemon(userIdNum, {...pokemon, shiny: newShiny}, session.backendToken);
        router.refresh();
     }
 
