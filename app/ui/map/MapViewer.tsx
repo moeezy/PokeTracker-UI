@@ -5,12 +5,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import HgssMap from "@/public/map/hgss_map_waifu2x_art_noise1_scale_waifu2x_art_noise1_scale.png";
 import { RouteWithArea } from "@/app/lib/definitions"; // adjust if needed
+import RouteSidebar from "@/app/ui/map/route-sidebar";
 
 export default function MapViewer() {
   const svgContainerRef = useRef<HTMLDivElement>(null);
 
   const [routes, setRoutes] = useState<RouteWithArea[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<RouteWithArea | null>(null);
+  const [pinnedRoute, setPinnedRoute] = useState<RouteWithArea | null>(null);
 
   // /map has no [userId] route segment - unlike /pokedex/[userId], the
   // userId here comes from whoever is logged in, not the URL.
@@ -88,6 +90,16 @@ export default function MapViewer() {
       paths.forEach((path) => {
         path.style.cursor = "pointer";
 
+        // Route polygons are thin/irregular, so a mouse hit that's a few
+        // pixels off the exact filled shape lands on the map artwork behind
+        // it instead and silently does nothing. A wide transparent stroke
+        // (paired with pointer-events: all, since a transparent stroke is
+        // otherwise excluded from hit-testing) pads the hoverable area
+        // without changing how the route looks.
+        path.style.pointerEvents = "all";
+        path.style.stroke = "transparent";
+        path.style.strokeWidth = "12";
+
         path.addEventListener("mouseenter", () => {
           path.style.fill = "#00ff00";
           path.style.opacity = "0.8";
@@ -115,11 +127,13 @@ export default function MapViewer() {
 
           const route = routeLookup[routeName];
 
-          if (route) {
-            setSelectedRoute(route);
+          if (!route) {
+            return;
           }
 
-          console.log(route);
+          // Clicking the already-pinned route unpins it; clicking any other
+          // route (re-)pins the sidebar to it.
+          setPinnedRoute((prev) => (prev?.routeId === route.routeId ? null : route));
         });
       });
     }
@@ -170,39 +184,11 @@ export default function MapViewer() {
           overflowY: "auto",
         }}
       >
-        {selectedRoute ? (
-          <>
-            <h2>{selectedRoute.routeName}</h2>
-
-            {selectedRoute.areas.map((area) => (
-              <div
-                key={area.areaId}
-                style={{
-                  marginBottom: "1.5rem",
-                }}
-              >
-                <h3>{area.areaName}</h3>
-
-                {area.encounters.map((encounter) => (
-                  <div
-                    key={`${encounter.pokedexNumber}-${encounter.encounterMethod}-${encounter.timeOfDay}`}
-                  >
-                    <strong>{encounter.name}</strong>
-                    <br />
-                    Method: {encounter.encounterMethod}
-                    <br />
-                    Time: {encounter.timeOfDay}
-                    <br />
-                    Caught: {encounter.caught ? "✅" : "❌"}
-                    <hr />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </>
-        ) : (
-          <p>Hover over a route.</p>
-        )}
+        <RouteSidebar
+          route={pinnedRoute ?? selectedRoute}
+          pinned={pinnedRoute !== null}
+          onUnpin={() => setPinnedRoute(null)}
+        />
       </div>
     </div>
   );
