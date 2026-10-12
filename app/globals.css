@@ -1,26 +1,158 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Tailwind's `dark:` variant normally follows the OS light/dark preference.
+  The site's only theme system is the time-of-day mode (REDESIGN_PLAN.md
+  Q9), so `dark:` is re-pointed at Night mode instead - existing `dark:`
+  classes then only apply once data-time="night" is set on <html>.
+*/
+@custom-variant dark (&:where([data-time="night"], [data-time="night"] *));
+
+/*
+  Design tokens. Non-inline @theme emits these as plain CSS variables on
+  :root, and the generated utilities (bg-panel, text-ink, ...) read them via
+  var(), so a [data-time="..."] block only has to redefine the variables to
+  re-theme the whole site - no component changes, no React re-render.
+
+  Default (no time mode selected) = HeartGold opening sunset.
+*/
+@theme {
+  /* Sky gradient, top -> horizon */
+  --color-sky-top: #2b1b4a;
+  --color-sky-upper: #5b2a6e;
+  --color-sky-mid: #b8456b;
+  --color-sky-low: #ec7a3c;
+  --color-horizon: #f9c25b;
+
+  /* Surfaces & text */
+  --color-panel: #fff8ef;
+  --color-panel-border: #f2c879;
+  --color-ink: #2a1a33;
+  --color-ink-muted: #6b5a70;
+
+  /* Accents */
+  --color-accent: #e8a317; /* Ho-Oh gold */
+  --color-accent-strong: #c2410c;
+  --color-caught: #3f9b5c;
+
+  /* Map route overlay. TEMPORARY: red marks which routes are already drawn
+     in the overlay SVG - remove once every route is in it, then set this
+     to a theme color (e.g. #ec7a3c). Hover/pinned is blue rather than the
+     old green, since red vs green is the most common color-blindness
+     confusion. */
+  --color-route: #aa0000;
+  --color-route-active: #2a75bb;
+
+  /* Pokémon logo colors (title text) */
+  --color-logo-fill: #ffcb05;
+  --color-logo-stroke: #2a75bb;
+
+  /* Gen 4 type colors, reused by the type filter and Pokémon cards */
+  --color-type-normal: #a8a878;
+  --color-type-fire: #f08030;
+  --color-type-water: #6890f0;
+  --color-type-grass: #78c850;
+  --color-type-electric: #f8d030;
+  --color-type-ice: #98d8d8;
+  --color-type-fighting: #c03028;
+  --color-type-poison: #a040a0;
+  --color-type-ground: #e0c068;
+  --color-type-flying: #a890f0;
+  --color-type-psychic: #f85888;
+  --color-type-bug: #a8b820;
+  --color-type-rock: #b8a038;
+  --color-type-ghost: #705898;
+  --color-type-dragon: #7038f8;
+  --color-type-dark: #705848;
+  --color-type-steel: #b8b8d0;
 }
 
+/*
+  Fonts come from next/font, which defines its variables on <html> rather
+  than :root, so these have to be `inline` (resolved where the utility is
+  used) instead of emitted as :root variables like the colors above.
+*/
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Placeholder until the Pokémon logo font file is added - see layout.tsx */
+  --font-display: var(--font-display-placeholder);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Yellow-fill / blue-outline Pokémon logo look, for main page titles only */
+@utility text-logo {
+  font-family: var(--font-display);
+  color: var(--color-logo-fill);
+  -webkit-text-stroke: 0.08em var(--color-logo-stroke);
+  paint-order: stroke fill;
+  text-shadow: 0 0.06em 0 var(--color-logo-stroke);
+  letter-spacing: 0.02em;
 }
 
+/*
+  Keeps upscaled pixel-art sprites crisp instead of blurry. Only use at
+  whole-number scales of the 80px source (80, 160, ...) - at fractional
+  scales nearest-neighbor drops pixels unevenly.
+*/
+@utility pixelated {
+  image-rendering: pixelated;
+}
+
+/*
+  Map route overlay (SVG injected by MapViewer). Styled here rather than via
+  per-path JS listeners, so hover is handled by the browser and theme
+  changes recolor routes for free.
+*/
+.route-overlay svg {
+  width: 100%;
+  height: 100%;
+}
+
+.route-overlay path {
+  cursor: pointer;
+  fill: var(--color-route);
+  opacity: 0.55;
+  transition: opacity 150ms, fill 150ms;
+  /*
+    Route polygons are thin/irregular, so a mouse hit a few pixels off the
+    filled shape would miss. A wide transparent stroke pads the hoverable
+    area without changing how the route looks (pointer-events: all, since a
+    transparent stroke is otherwise excluded from hit-testing).
+  */
+  stroke: transparent;
+  stroke-width: 12;
+  pointer-events: all;
+}
+
+.route-overlay path:hover,
+.route-overlay path[data-pinned] {
+  fill: var(--color-route-active);
+  opacity: 0.75;
+}
+
+/*
+  Solid fallback color for the instant before the gradient layer paints,
+  and for overscroll areas.
+*/
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-sky-top);
+  color: var(--color-ink);
+}
+
+/*
+  Rendered once as a fixed layer (see layout.tsx) rather than as a body
+  background: a fixed element gets its own compositor layer, so scrolling
+  doesn't repaint the gradient, unlike background-attachment: fixed.
+*/
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    var(--color-sky-top) 0%,
+    var(--color-sky-upper) 30%,
+    var(--color-sky-mid) 60%,
+    var(--color-sky-low) 82%,
+    var(--color-horizon) 100%
+  );
 }

@@ -7,8 +7,8 @@ export default function EncounterSprite({ encounter }: { encounter: Encounter })
             title={`${encounter.name}${encounter.caught ? ' (caught)' : ''}`}
             className={`flex flex-col items-center rounded-lg border p-1 text-center ${
                 encounter.caught
-                    ? 'border-emerald-300 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/40'
-                    : 'border-gray-200 bg-gray-50 opacity-60 grayscale dark:border-gray-700 dark:bg-gray-900/40'
+                    ? 'border-caught/50 bg-caught/10'
+                    : 'border-ink/10 bg-ink/5 opacity-60 grayscale'
             }`}
         >
             <div className="relative">
@@ -19,7 +19,7 @@ export default function EncounterSprite({ encounter }: { encounter: Encounter })
                     height={40}
                 />
                 {encounter.caught && (
-                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white">
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-caught text-[10px] text-white">
                         ✓
                     </span>
                 )}

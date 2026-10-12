@@ -4,11 +4,11 @@ export default function PokemonIdentifier({pokemon}: { pokemon: UserPokemon}){
 
     return(
         <div className="flex-1 min-w-0">
-            <p className="truncate text-sm font-semibold md:text-base">
-                {pokemon.name}
+            <p className="text-xs font-bold tracking-wide text-ink-muted">
+                #{String(pokemon.pokedexNumber).padStart(3, '0')}
             </p>
-            <p className="hidden text-sm font-semibold sm:block">
-                {pokemon.pokedexNumber}
+            <p className="truncate font-semibold capitalize text-ink">
+                {pokemon.name}
             </p>
         </div>
     );

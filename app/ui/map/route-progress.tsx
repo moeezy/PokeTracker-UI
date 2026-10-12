@@ -16,13 +16,13 @@ export default function RouteProgress({ route }: { route: RouteWithArea }) {
 
     return (
         <div className="mb-4">
-            <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
+            <div className="mb-1 flex items-center justify-between text-xs text-ink-muted">
                 <span>{caught}/{total} caught</span>
                 <span>{percent}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-ink/10">
                 <div
-                    className="h-full rounded-full bg-emerald-500 transition-all"
+                    className="h-full rounded-full bg-caught transition-all"
                     style={{ width: `${percent}%` }}
                 />
             </div>

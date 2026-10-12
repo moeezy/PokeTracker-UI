@@ -1,6 +1,5 @@
 import { UserPokemon } from "@/app/lib/definitions";
 import { getUserPokemonById } from "@/app/lib/api";
-import AllPokemon from "@/app/ui/all-pokemon";
 import PokemonGrid from "@/app/ui/pokemon/pokemon-grid";
 import { auth } from "@/auth";
 

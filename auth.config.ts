@@ -13,7 +13,9 @@ export const authConfig = {
         // used to fire for every non-protected page (including "/"), which
         // made Home unreachable while logged in.
         if (isLoggedIn && nextUrl.pathname === '/login') {
-          return Response.redirect(new URL('/pokedex/1', nextUrl));
+          // Was '/pokedex/1', which sent every user to user 1's Pokédex.
+          // The landing page avoids needing the userId here at all.
+          return Response.redirect(new URL('/', nextUrl));
         }
         return true; // Redirect unauthenticated users to login page
     },

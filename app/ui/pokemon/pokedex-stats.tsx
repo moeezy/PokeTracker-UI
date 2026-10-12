@@ -1,6 +1,8 @@
 import { UserPokemon } from "@/app/lib/definitions";
 
-export default function PokedexStats({ pokemon }: { pokemon: UserPokemon[] }) {
+// `label` names the subset being measured (e.g. "GEN I · GEN III") so a
+// filtered percentage isn't mistaken for overall progress.
+export default function PokedexStats({ pokemon, label }: { pokemon: UserPokemon[]; label: string }) {
     const total = pokemon.length;
     const caught = pokemon.filter((p) => p.caught).length;
     const missing = total - caught;
@@ -12,7 +14,7 @@ export default function PokedexStats({ pokemon }: { pokemon: UserPokemon[] }) {
     const dash = (percent / 100) * circumference;
 
     return (
-        <div className="flex flex-wrap items-center gap-8 rounded-2xl border border-gray-200 bg-white/60 p-6 dark:border-gray-700 dark:bg-gray-900/40">
+        <div className="flex flex-wrap items-center gap-8 rounded-2xl border border-panel-border bg-panel p-6">
             <div className="relative shrink-0">
                 <svg width="140" height="140" viewBox="0 0 140 140" className="-rotate-90">
                     <circle
@@ -22,7 +24,7 @@ export default function PokedexStats({ pokemon }: { pokemon: UserPokemon[] }) {
                         fill="none"
                         stroke="currentColor"
                         strokeWidth={strokeWidth}
-                        className="text-gray-200 dark:text-gray-700"
+                        className="text-ink/10"
                     />
                     {dash > 0 && (
                         <circle
@@ -34,19 +36,22 @@ export default function PokedexStats({ pokemon }: { pokemon: UserPokemon[] }) {
                             strokeWidth={strokeWidth}
                             strokeLinecap="round"
                             strokeDasharray={`${dash} ${circumference - dash}`}
-                            className="text-emerald-500"
+                            className="text-caught"
                         />
                     )}
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-2xl font-bold">{percent}%</span>
-                    <span className="text-xs text-gray-500">owned</span>
+                    <span className="text-xs text-ink-muted">owned</span>
                 </div>
             </div>
-            <div className="flex flex-wrap gap-8">
-                <Stat label="Caught" value={caught} colorClass="bg-emerald-500" />
-                <Stat label="Missing" value={missing} colorClass="bg-gray-300 dark:bg-gray-600" />
-                <Stat label="Total" value={total} />
+            <div className="space-y-3">
+                <p className="text-sm font-bold tracking-wide text-ink-muted">{label}</p>
+                <div className="flex flex-wrap gap-8">
+                    <Stat label="Caught" value={caught} colorClass="bg-caught" />
+                    <Stat label="Missing" value={missing} colorClass="bg-ink/20" />
+                    <Stat label="Total" value={total} />
+                </div>
             </div>
         </div>
     );
@@ -58,7 +63,7 @@ function Stat({ label, value, colorClass }: { label: string; value: number; colo
             {colorClass && <span className={`h-2.5 w-2.5 rounded-full ${colorClass}`} />}
             <div>
                 <p className="text-lg font-semibold">{value}</p>
-                <p className="text-xs text-gray-500">{label}</p>
+                <p className="text-xs text-ink-muted">{label}</p>
             </div>
         </div>
     );

@@ -12,7 +12,7 @@ export default function RouteSidebar({
     onUnpin: () => void;
 }) {
     if (!route) {
-        return <p className="text-sm text-gray-500">Hover over a route, or click to pin it.</p>;
+        return <p className="text-sm text-ink-muted">Hover over a route, or click to pin it.</p>;
     }
 
     return (
@@ -22,7 +22,7 @@ export default function RouteSidebar({
                 {pinned && (
                     <button
                         onClick={onUnpin}
-                        className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                        className="shrink-0 rounded-full bg-ink/5 px-2 py-0.5 text-xs text-ink-muted hover:bg-ink/10 hover:text-ink"
                     >
                         📌 Unpin
                     </button>
@@ -41,7 +41,7 @@ export default function RouteSidebar({
 
                 return (
                     <div key={area.areaId} className="mb-4">
-                        <h3 className="mb-2 text-sm font-semibold capitalize text-gray-500">
+                        <h3 className="mb-2 text-sm font-semibold capitalize text-ink-muted">
                             {area.areaName.replace(/-/g, ' ')}
                         </h3>
                         {Array.from(groups.entries()).map(([method, encounters]) => (
